@@ -1,0 +1,54 @@
+#include<Servo.h>
+const int buzzerpin=8;
+const int ldrpin=6;
+const int pirpin=4;
+int pinstatecurrent=LOW;
+int pinstateprevious=LOW;
+
+
+Servo myservo;
+
+void setup()
+{
+  Serial.begin(9600);
+  
+  pinMode(buzzerpin,OUTPUT);
+  pinMode(ldrpin,INPUT);
+  pinMode(pirpin,INPUT);
+  
+  myservo.attach(10);
+  myservo.write(0);
+}
+
+void loop()
+{
+ int detector=digitalRead(pirpin);
+  
+ pinstateprevious=pinstatecurrent;
+  pinstatecurrent=detector;
+  
+  if(pinstatecurrent==HIGH&&pinstateprevious==LOW)
+  {
+    Serial.println("MOTION IS DETECTED");
+    digitalWrite(buzzerpin,HIGH);
+  }
+  else
+  {
+    Serial.println("NO MOTION IS DETECTED");
+  }
+  
+  int brightness=analogRead(ldrpin);
+  
+  if(brightness>50)
+  {
+    myservo.write(90);
+  }
+  
+  else
+  {
+    myservo.write(0);
+  }
+}
+
+    
+    
